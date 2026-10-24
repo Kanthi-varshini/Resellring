@@ -57,7 +57,7 @@ export default function ListingDetail() {
               </p>
               <p className="mt-3 text-zinc-400">{listing.description}</p>
               <p className="mt-3 text-sm text-zinc-500">
-                Seller <strong className="text-zinc-300">{listing.seller?.name}</strong>
+                Seller <Link to={`/sellers/${listing.seller?._id}`} className="font-bold text-acid hover:underline">{listing.seller?.name}</Link>
                 {listing.seller?.ratingCount > 0 && <span className="text-acid"> ★ {listing.seller.rating} ({listing.seller.ratingCount})</span>}
                 {' · '}{listing.seller?.salesCount} sales
               </p>

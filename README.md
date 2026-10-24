@@ -156,6 +156,9 @@ Live links: backend — [add URL] · frontend — [add URL]
 - Frontend handles loading/empty/error/success states; toasts on every
   mutation; 401 auto-logout.
 
+- **Watchlist** — track any listing; a watch route with idempotent upsert (sale alerts ready).
+- **Public seller profiles** — ratings, sales history, active listings and reviews on one page.
+
 ## Roadmap
 
 - Photo uploads on listings.

@@ -5,6 +5,7 @@ import Register from './pages/Register.jsx';
 import Market from './pages/Market.jsx';
 import ListingDetail from './pages/ListingDetail.jsx';
 import MyRing from './pages/MyRing.jsx';
+import SellerProfile from './pages/SellerProfile.jsx';
 import NotFound from './pages/NotFound.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
@@ -18,6 +19,7 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route path="/listings/:id" element={<ListingDetail />} />
         <Route path="/my-ring" element={<MyRing />} />
+        <Route path="/sellers/:id" element={<SellerProfile />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

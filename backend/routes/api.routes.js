@@ -3,6 +3,7 @@ const rateLimit = require('express-rate-limit');
 const a = require('../controllers/auth.controller');
 const l = require('../controllers/listing.controller');
 const o = require('../controllers/offer.controller');
+const extra = require('../controllers/extra.controller');
 const { requireAuth } = require('../middlewares/auth');
 
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 50, standardHeaders: true, legacyHeaders: false });
@@ -12,6 +13,7 @@ router.post('/auth/login', authLimiter, a.login);
 router.get('/auth/me', requireAuth, a.me);
 
 router.get('/listings', l.list); // public marketplace browse
+router.get('/sellers/:id', extra.sellerProfile); // public profile
 
 router.use(requireAuth);
 router.post('/listings', l.create);
@@ -27,5 +29,8 @@ router.patch('/offers/:id/accept', o.accept);
 router.patch('/offers/:id/counter', o.counter);
 router.patch('/offers/:id/decline', o.decline);
 router.patch('/offers/:id/withdraw', o.withdraw);
+router.post("/listings/:id/watch", extra.watch);
+router.delete('/listings/:id/watch', extra.unwatch);
+router.get('/watchlist', extra.watchlist);
 
 module.exports = router;
