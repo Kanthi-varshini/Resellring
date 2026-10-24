@@ -1,0 +1,25 @@
+import { Routes, Route } from 'react-router-dom';
+import Landing from './pages/Landing.jsx';
+import Login from './pages/Login.jsx';
+import Register from './pages/Register.jsx';
+import Market from './pages/Market.jsx';
+import ListingDetail from './pages/ListingDetail.jsx';
+import MyRing from './pages/MyRing.jsx';
+import NotFound from './pages/NotFound.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/market" element={<Market />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/listings/:id" element={<ListingDetail />} />
+        <Route path="/my-ring" element={<MyRing />} />
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
