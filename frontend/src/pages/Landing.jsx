@@ -26,14 +26,14 @@ export default function Landing() {
             listing → offers → acceptance → pickup → rating.
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <Link to="/market" className="rounded bg-acid px-10 py-4 font-bold text-void shadow-lg shadow-lime-500/20 transition hover:-translate-y-0.5">Browse the market →</Link>
-            <Link to="/register" className="rounded border border-edge px-10 py-4 font-bold text-zinc-200 hover:border-acid">Start selling</Link>
+            <Link to="/market" className="btn-3d rounded bg-acid px-10 py-4 font-bold text-void shadow-lg shadow-lime-500/20 transition hover:-translate-y-0.5">Browse the market →</Link>
+            <Link to="/register" className="btn-3d rounded border border-edge px-10 py-4 font-bold text-zinc-200 hover:border-acid">Start selling</Link>
           </div>
         </section>
 
         {/* offer chain demo */}
         <section className="reveal mx-auto mb-10 max-w-2xl">
-          <div className="rounded-2xl border border-edge bg-card p-7">
+          <div className="float-3d rounded-2xl border border-edge bg-card p-7">
             <p className="display text-xs uppercase tracking-widest text-zinc-500">offer chain · SL3 phone</p>
             <div className="mt-5 flex flex-wrap items-center gap-2 text-sm font-bold">
               {[['Offer ₹19,000', 'bg-zinc-700 text-zinc-200'], ['→', 'text-zinc-600'], ['Counter ₹20,500', 'bg-amber-500/20 text-amber-300'], ['→', 'text-zinc-600'], ['ACCEPTED', 'bg-acid text-void']].map(([t, c], i) => (
