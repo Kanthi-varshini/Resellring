@@ -10,6 +10,7 @@ export default function Navbar() {
         <Link to="/market" className="display text-lg font-bold tracking-tight text-acid">RESELLRING</Link>
         <nav className="flex items-center gap-1 text-sm font-semibold">
           <Link to="/market" className="rounded px-3 py-2 text-zinc-400 hover:text-white">Market</Link>
+          <Link to="/guide" className="rounded-full px-3 py-2 text-sm font-semibold opacity-60 hover:opacity-100">📖 Guide</Link>
           {user ? (
             <>
               <Link to="/my-ring" className="rounded px-3 py-2 text-zinc-400 hover:text-white">My ring</Link>

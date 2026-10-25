@@ -7,6 +7,7 @@ import ListingDetail from './pages/ListingDetail.jsx';
 import MyRing from './pages/MyRing.jsx';
 import SellerProfile from './pages/SellerProfile.jsx';
 import NotFound from './pages/NotFound.jsx';
+import Guide from './pages/Guide.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/my-ring" element={<MyRing />} />
         <Route path="/sellers/:id" element={<SellerProfile />} />
       </Route>
+      <Route path="/guide" element={<Guide />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
