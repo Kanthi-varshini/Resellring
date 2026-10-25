@@ -4,6 +4,7 @@ import client from '../api/client.js';
 import Navbar from '../components/Navbar.jsx';
 import { Loading, Empty, ErrorState } from '../components/states.jsx';
 import { useToast } from '../context/ToastContext.jsx';
+import SceneBackground from '../components/SceneBackground.jsx';
 
 export default function MyRing() {
   const toast = useToast();
@@ -36,13 +37,14 @@ export default function MyRing() {
     try { await fn(); toast(msg); load(); } catch (err) { toast(err.message, 'error'); }
   }
 
-  if (error) return <div className="min-h-screen"><Navbar /><main className="mx-auto max-w-4xl px-4 py-10"><ErrorState message={error} onRetry={load} /></main></div>;
-  if (!data) return <div className="min-h-screen"><Navbar /><Loading label="Opening your ring…" /></div>;
+  if (error) return <div className="relative min-h-screen"><Navbar />
+      <SceneBackground /><main className="relative mx-auto max-w-4xl px-4 py-10"><ErrorState message={error} onRetry={load} /></main></div>;
+  if (!data) return <div className="relative min-h-screen"><Navbar /><Loading label="Opening your ring…" /></div>;
 
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen">
       <Navbar />
-      <main className="mx-auto max-w-4xl px-4 py-10">
+      <main className="relative mx-auto max-w-4xl px-4 py-10">
         <div className="flex items-center justify-between">
           <h1 className="display text-2xl font-bold">MY RING</h1>
           <button onClick={() => setShowNew(true)} className="rounded bg-acid px-5 py-2.5 text-sm font-bold text-void">+ List something</button>
