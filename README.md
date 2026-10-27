@@ -1,167 +1,299 @@
-# ResellRing — Sell fast on campus
+<div align="center">
 
-A second-hand marketplace built around the **offer, not the listing**:
-listing → offers → acceptance → pickup → rating, with exclusive deals and
-category price history.
+```
+██████╗ ███████╗███████╗███████╗██╗     ██╗     ██████╗ ██╗███╗   ██╗ ██████╗
+██╔══██╗██╔════╝██╔════╝██╔════╝██║     ██║     ██╔══██╗██║████╗  ██║██╔════╝
+██████╔╝█████╗  ███████╗█████╗  ██║     ██║     ██████╔╝██║██╔██╗ ██║██║  ███╗
+██╔══██╗██╔══╝  ╚════██║██╔══╝  ██║     ██║     ██╔══██╗██║██║╚██╗██║██║   ██║
+██║  ██║███████╗███████║███████╗███████╗███████╗██║  ██║██║██║ ╚████║╚██████╔╝
+╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝
+```
+
+### 💰 *The campus resale marketplace — no ghosting, no chaos, just deals.*
+
+<br/>
+
+![Version](https://img.shields.io/badge/version-1.0.0-d3f26a?style=for-the-badge&labelColor=060606)
+![Stack](https://img.shields.io/badge/stack-MERN-d3f26a?style=for-the-badge&logo=mongodb&labelColor=060606&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&labelColor=060606&logoColor=61DAFB)
+![Offers](https://img.shields.io/badge/offer--chain-live-d3f26a?style=for-the-badge&labelColor=060606)
+![License](https://img.shields.io/badge/license-MIT-d3f26a?style=for-the-badge&labelColor=060606)
+
+<br/>
+
+> **"No more 'available?' comments. No more ghosted buyers. Just an offer, a counter, and a deal."**
+
+</div>
 
 ---
 
-## Problem Statement
+## 💰 What is ResellRing?
 
-Marketplace groups are comment chaos: "is this available?", price haggling in
-DMs, and meetups that never happen — with multiple buyers promised the same
-item. ResellRing structures the sale so every offer has a real amount, a
-visible chain, and exactly one winner.
+**ResellRing** is a structured campus-to-campus resale marketplace that replaces the chaos of WhatsApp groups and comment threads. Every item listing has a formal **offer chain** — buyers bid real amounts, sellers counter or accept, and accepting one offer automatically declines all others.
 
-## Target Users
+No ghosting. No ambiguity. Transparent pricing history. Seller ratings after every completed sale.
 
-- **Students** clearing out books, electronics and furniture each semester.
-- **Buyers** who want honest prices and non-ghosting sellers.
-- **Sellers** who want serious offers instead of "dm price" comments.
+---
 
-## Solution
+## ✨ Feature Showcase
 
-Sellers list items with a price, condition and meetup spot. Buyers make real
-offers the seller can accept, counter or decline — all transitions guarded by
-a state machine. Accepting locks the listing (other live offers auto-decline)
-and records the agreed price; marking the handover done unlocks the buyer's
-rating, which feeds the seller's public score. Every listing shows recent sold
-prices in its category.
+| 🏷️ Feature | 📋 Description | 🔥 Why It Matters |
+|---|---|---|
+| 📦 **List an Item** | Post with images, price, category, condition | Structured, not spam |
+| 💬 **Offer Chain** | Buyers make offers; sellers accept or counter | No comment chaos |
+| 🔒 **Exclusive Deals** | Accepting one offer auto-declines all others | No ghosted buyers |
+| 📊 **Price History** | Last 3 sold prices shown per category | Set fair prices |
+| 🏷️ **Categories** | Electronics, Books, Furniture, Bikes, Clothing + more | Easy browsing |
+| ★ **Seller Ratings** | Rate after deal completion; public score shown | Build trust |
+| 🔍 **Search & Filter** | Price range, category, condition, date | Find fast |
+| 📍 **Campus Pickup** | Specify pickup spot; arrange via in-app messages | Safe meetups |
 
-## Key Features
+---
 
-- **Offer state machine** — `open → countered → accepted | declined |
-  withdrawn`, invalid transitions return 409 with the current state named.
-- **Exclusive deals** — acceptance sets the listing to `pending`, stores the
-  agreed price, and auto-declines all rival offers (tested).
-- **Visible offer chain** — buyers and sellers see the full history
-  (Offer ₹19,000 → Counter ₹20,500 → Accepted).
-- **Category price history** — the last 10 sold prices per category on every
-  listing page.
-- **Reputation** — buyer ratings update the seller's cached average and sales
-  count; "My ring" dashboards for both sides.
+## 🗺️ ResellRing Mindmap
 
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Frontend | React 18, Vite, Tailwind CSS 4, React Router 6, Axios |
-| Backend | Node.js, Express 4, Mongoose 8, Zod validation |
-| Auth | JWT (7-day), bcryptjs, rate-limited auth |
-| Database | MongoDB (Atlas or local); `USE_MEMORY_DB=1` zero-config demo |
-| Tests | `node:test` + `mongodb-memory-server` (19 checks incl. state-machine tests) |
-| Deployment | Render (backend `render.yaml`) + Vercel (frontend `vercel.json`) |
-
-## Architecture
-
-```text
-React SPA (Vercel) — market grid, listing page with offer chain, my-ring dashboards
-   │  axios + JWT bearer
-   ▼
-Express API (Render)
-   │   /api/listings        public browse+filters; authed CRUD, mark-sold
-   │   ├─ offers            state machine: accept/counter/decline/withdraw
-   │   ├─ accept            locks listing + auto-declines rivals
-   │   └─ rating            buyer-only after sold; refreshes seller cache
-   ▼
-MongoDB: User (rating cache) · Listing (status machine) · Offer (history[]) · Rating
+```mermaid
+mindmap
+  root((💰 ResellRing))
+    Listing
+      Create Listing
+        Title & Description
+        Price & Category
+        Condition
+        Images Upload
+        Pickup Location
+      Manage Listings
+        Edit
+        Mark Sold
+        Delete
+      My Ring
+        Active Listings
+        Sold History
+        Offer History
+    Offers
+      Browse Market
+      Make an Offer
+        Offer Amount
+        Message to Seller
+      Offer Chain
+        Seller Counters
+        Buyer Re-offers
+        Accept or Decline
+      Auto-Decline Others
+        On Acceptance
+        Notification Sent
+    Ratings
+      Rate Seller Post-Sale
+      Rate Buyer Post-Sale
+      Public Score Display
+      Review History
+    Discovery
+      Market Browse
+      Search
+      Filter by Category
+      Filter by Price
+      Sold Price History
 ```
 
-## Major Workflows
+---
 
-1. **List an item** — title, category, price, condition, campus + meetup spot.
-2. **Offer & negotiate** — real amounts; sellers counter; the chain renders
-   visually on the listing.
-3. **Accept & coordinate** — acceptance locks the listing, rivals are declined
-   automatically; both sides see the agreed price and meetup spot.
-4. **Mark sold & rate** — handover confirmation enables the buyer's one-time
-   1–5 star rating; seller averages update.
-5. **My ring** — seller dashboard (live offer counts, mark sold) + buyer
-   dashboard (offer states, withdraw).
+## 🔄 Offer Chain Flow
 
-## Local Setup
+```mermaid
+sequenceDiagram
+    participant B1 as 🙋 Buyer 1
+    participant B2 as 🙋 Buyer 2
+    participant L as 📦 Listing
+    participant S as 🏪 Seller
+
+    B1->>L: Make Offer ₹19,000
+    B2->>L: Make Offer ₹18,500
+    L->>S: 📬 2 offers received
+    S->>B1: Counter ₹20,500
+    B1->>S: Accept ₹20,500 ✅
+    S->>L: Mark as LOCKED
+    L-->>B2: ❌ Auto-Declined
+    B2-->>B2: 🔔 "Offer declined"
+    S->>B1: 📍 Arrange pickup
+    B1->>S: ⭐ Rate Seller
+    S->>B1: ⭐ Rate Buyer
+```
+
+---
+
+## 📊 Listing Lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> Available: 📦 Listing Posted
+    Available --> Negotiating: 💬 Offers Received
+    Negotiating --> Locked: 🔒 Offer Accepted
+    Locked --> Sold: ✅ Pickup Complete
+    Available --> Expired: ⏱️ 30 days inactive
+    Sold --> Rated: ⭐ Both parties rate
+    Rated --> [*]: 🗄️ Archived
+
+    note right of Locked
+        All other offers
+        auto-declined with
+        notification
+    end note
+```
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+graph TB
+    subgraph FE["🖥️ Frontend (port 5311)"]
+        MK[Market Browse]
+        LD[Listing Detail + Offers]
+        MR[My Ring]
+        SP[Seller Profile]
+        CS[Create/Edit Listing]
+    end
+    subgraph BE["⚙️ Backend (port 5111)"]
+        API[Express /api]
+        LR[/listings]
+        OR[/offers]
+        MR2[/messages]
+        RR[/ratings]
+        UP[/upload]
+    end
+    subgraph DB["🍃 MongoDB"]
+        LS[(Listings)]
+        OF[(Offers)]
+        MS[(Messages)]
+        RT[(Ratings)]
+        IM[(Images)]
+    end
+
+    FE -->|Axios + JWT| BE
+    LR --> LS
+    OR --> OF
+    OR -->|on accept| OF
+    RR --> RT
+    UP --> IM
+
+    style FE fill:#060606,color:#d3f26a,stroke:#d3f26a
+    style BE fill:#040404,color:#d3f26a,stroke:#d3f26a
+    style DB fill:#020202,color:#d3f26a,stroke:#d3f26a
+```
+
+---
+
+## 📊 Data Model
+
+```mermaid
+erDiagram
+    USER {
+        string id PK
+        string name
+        string email
+        string passwordHash
+        float sellerRating
+        number totalSales
+    }
+    LISTING {
+        string id PK
+        string sellerId FK
+        string title
+        string description
+        string category
+        string condition
+        number askingPrice
+        string[] imageUrls
+        string pickupLocation
+        string status "available|negotiating|locked|sold|expired"
+    }
+    OFFER {
+        string id PK
+        string listingId FK
+        string buyerId FK
+        number amount
+        string message
+        string status "pending|countered|accepted|declined"
+        number counterAmount
+    }
+    RATING {
+        string id PK
+        string reviewerId FK
+        string revieweeId FK
+        string listingId FK
+        number stars
+        string comment
+    }
+
+    USER ||--o{ LISTING : "sells"
+    LISTING ||--o{ OFFER : "receives"
+    USER ||--o{ OFFER : "makes"
+    USER ||--o{ RATING : "gives"
+    USER ||--o{ RATING : "receives"
+```
+
+---
+
+## 🎨 Design Identity
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   RESELLRING PALETTE                        │
+├──────────────┬──────────────┬──────────────┬───────────────┤
+│  Extreme Void│  Acid Green  │  Ember       │  Zinc         │
+│  #060606     │  #d3f26a     │  #ff6b35     │  #71717a      │
+│  ████████    │  ████████    │  ████████    │  ████████     │
+├──────────────┴──────────────┴──────────────┴───────────────┤
+│  Typography: Unbounded (Display) + Inter + Space Mono       │
+│  Aesthetic: Extreme dark · price tags · acid yellow brand   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🚀 Quick Start
 
 ```bash
-# 1. Backend
-cd backend
-npm install
-npm test                       # 19-check suite (no database needed)
+# Backend (in-memory DB, pre-seeded)
+cd resellring/backend && cp .env.example .env && npm install && npm run dev
 
-# Zero-config demo:
-USE_MEMORY_DB=1 npm start      # API on http://localhost:5111
+# Frontend
+cd resellring/frontend && npm install && npm run dev
 
-# Or with a real MongoDB:
-cp .env.example .env           # set MONGODB_URI + JWT_SECRET
-npm run seed
-npm start
-
-# 2. Frontend
-cd ../frontend
-npm install
-npm run dev                    # app on http://localhost:5311
+# Visit
+open http://localhost:5311
 ```
 
-**Demo credentials** (password `Demo@1234`): `kabir@demo.com` (seller with
-live + countered + accepted offers), `tara@demo.com`, `zoya@demo.com`,
-`imran@demo.com` (buyer of the pending lamp deal). Seed: 7 listings across
-categories, one sold with rating, and price history for books.
+### 🎭 Demo Accounts
+| Role | Email | Password | What's Inside |
+|------|-------|----------|---------------|
+| 🏪 Seller | `kabir@demo.com` | `Demo@1234` | Active listings, incoming offers |
+| 🛒 Buyer | `tara@demo.com` | `Demo@1234` | Pending offers, purchase history |
 
-## Environment Variables
+---
 
-### backend/.env
+## 📁 Project Structure
 
-| Name | Purpose |
-|---|---|
-| `PORT` | API port (default 5111) |
-| `MONGODB_URI` | MongoDB connection string (empty + `USE_MEMORY_DB=1` for demo mode) |
-| `USE_MEMORY_DB` | `1` = ephemeral in-memory MongoDB, auto-seeded on boot |
-| `JWT_SECRET` | Secret used to sign JWTs — long random string in production |
-| `CLIENT_ORIGIN` | Frontend origin allowed by CORS (default http://localhost:5311) |
+```
+resellring/
+├── 🖥️ frontend/
+│   └── src/
+│       ├── pages/     # Landing, Market, ListingDetail, MyRing, SellerProfile
+│       └── components/  # Navbar, states, SceneBackground
+└── ⚙️ backend/
+    ├── routes/        # listings, offers, ratings, messages, upload
+    ├── models/        # User, Listing, Offer, Rating, Message
+    └── seed/          # Demo listings with offer chains
+```
 
-### frontend/.env
+---
 
-| Name | Purpose |
-|---|---|
-| `VITE_API_URL` | Backend API base URL (default http://localhost:5111/api) |
+<div align="center">
 
-## API Overview
+### 💰 Structured deals. Zero ghosting. Campus hustle, done right.
 
-| Method & path | Purpose |
-|---|---|
-| `POST /api/auth/register` · `POST /api/auth/login` · `GET /api/auth/me` | Auth |
-| `GET /api/listings?q&category&maxPrice&campus` | Public marketplace |
-| `POST /api/listings` · `GET /api/listings/mine` · `PATCH/DELETE /api/listings/:id` | Listing management |
-| `PATCH /api/listings/:id/sold` | Confirm handover (requires pending deal) |
-| `POST /api/listings/:id/offers` · `GET /api/listings/:id/offers` | Make / view offers |
-| `PATCH /api/offers/:id/accept` · `…/counter` · `…/decline` · `…/withdraw` | State machine |
-| `POST /api/listings/:id/rating` | Buyer rates a completed sale |
-| `GET /api/health` | Health probe |
+![Zero Ghosting](https://img.shields.io/badge/Zero-Ghosting-d3f26a?style=for-the-badge&labelColor=060606)
+![Offer Chain](https://img.shields.io/badge/Offer-Chain%20System-d3f26a?style=for-the-badge&labelColor=060606)
+![Campus](https://img.shields.io/badge/For-Campus%20Resale-ff6b35?style=for-the-badge&labelColor=060606)
 
-## Deployment
-
-- **Backend**: Render web service from `backend/render.yaml`; set `MONGODB_URI`,
-  `JWT_SECRET`, `CLIENT_ORIGIN`; health check `/api/health`.
-- **Frontend**: Vercel from `frontend/` (SPA rewrite); set `VITE_API_URL`.
-
-Live links: backend — [add URL] · frontend — [add URL]
-
-## Error Handling & Security
-
-- Zod validation everywhere; the offer state machine rejects every invalid
-  transition with 409 and a message naming the current state.
-- Seller authorization resolved through the listing (offers carry no seller
-  field to spoof); buyers only withdraw their own offers.
-- One live offer per buyer per listing (unique check); self-offers blocked.
-- bcrypt(12) hashing, no account enumeration, rate-limited auth, 7-day JWTs.
-- Frontend handles loading/empty/error/success states; toasts on every
-  mutation; 401 auto-logout.
-
-- **Watchlist** — track any listing; a watch route with idempotent upsert (sale alerts ready).
-- **Public seller profiles** — ratings, sales history, active listings and reviews on one page.
-
-## Roadmap
-
-- Photo uploads on listings.
-- In-app chat anchored to the offer chain.
-- Saved searches with alerts.
-- Seller payout tracking for paid platforms.
+</div>

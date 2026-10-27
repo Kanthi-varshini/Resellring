@@ -17,10 +17,10 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/market" element={<Market />} />
+      <Route path="/listings/:id" element={<ListingDetail />} />
+      <Route path="/sellers/:id" element={<SellerProfile />} />
       <Route element={<ProtectedRoute />}>
-        <Route path="/listings/:id" element={<ListingDetail />} />
         <Route path="/my-ring" element={<MyRing />} />
-        <Route path="/sellers/:id" element={<SellerProfile />} />
       </Route>
       <Route path="/guide" element={<Guide />} />
       <Route path="*" element={<NotFound />} />
