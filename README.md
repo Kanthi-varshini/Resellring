@@ -45,7 +45,7 @@ No ghosting. No ambiguity. Transparent pricing history. Seller ratings after eve
 | 📊 **Price History** | Last 3 sold prices shown per category | Set fair prices |
 | 🏷️ **Categories** | Electronics, Books, Furniture, Bikes, Clothing + more | Easy browsing |
 | ★ **Seller Ratings** | Rate after deal completion; public score shown | Build trust |
-| 🔍 **Search & Filter** | Price range, category, condition, date | Find fast |
+| 🔍 **Search and Filter** | Price range, category, condition, date | Find fast |
 | 📍 **Campus Pickup** | Specify pickup spot; arrange via in-app messages | Safe meetups |
 
 ---
@@ -54,11 +54,11 @@ No ghosting. No ambiguity. Transparent pricing history. Seller ratings after eve
 
 ```mermaid
 mindmap
-  root((💰 ResellRing))
+  root((ResellRing))
     Listing
       Create Listing
-        Title & Description
-        Price & Category
+        Title and Description
+        Price and Category
         Condition
         Images Upload
         Pickup Location
@@ -101,22 +101,22 @@ mindmap
 
 ```mermaid
 sequenceDiagram
-    participant B1 as 🙋 Buyer 1
-    participant B2 as 🙋 Buyer 2
-    participant L as 📦 Listing
-    participant S as 🏪 Seller
+    participant B1 as Buyer 1
+    participant B2 as Buyer 2
+    participant L as Listing
+    participant S as Seller
 
     B1->>L: Make Offer ₹19,000
     B2->>L: Make Offer ₹18,500
-    L->>S: 📬 2 offers received
+    L->>S: 2 offers received
     S->>B1: Counter ₹20,500
-    B1->>S: Accept ₹20,500 ✅
+    B1->>S: Accept ₹20,500
     S->>L: Mark as LOCKED
-    L-->>B2: ❌ Auto-Declined
-    B2-->>B2: 🔔 "Offer declined"
-    S->>B1: 📍 Arrange pickup
-    B1->>S: ⭐ Rate Seller
-    S->>B1: ⭐ Rate Buyer
+    L-->>B2: Offer auto-declined
+    Note over B2: 🔔 Notification - Offer declined
+    S->>B1: Arrange pickup
+    B1->>S: Rate Seller
+    S->>B1: Rate Buyer
 ```
 
 ---
@@ -125,18 +125,20 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Available: 📦 Listing Posted
-    Available --> Negotiating: 💬 Offers Received
-    Negotiating --> Locked: 🔒 Offer Accepted
-    Locked --> Sold: ✅ Pickup Complete
-    Available --> Expired: ⏱️ 30 days inactive
-    Sold --> Rated: ⭐ Both parties rate
-    Rated --> [*]: 🗄️ Archived
+    [*] --> Available: Listing Posted
+    Available --> Negotiating: Offers Received
+    Negotiating --> Available: All offers withdrawn
+    Negotiating --> Locked: Offer Accepted
+    Locked --> Sold: Pickup Complete
+    Available --> Expired: 30 days inactive
+    Expired --> [*]
+    Sold --> Rated: Both parties rate
+    Rated --> [*]: Archived
 
     note right of Locked
-        All other offers
+        All other offers are
         auto-declined with
-        notification
+        a notification
     end note
 ```
 
@@ -151,15 +153,15 @@ graph TB
         LD[Listing Detail + Offers]
         MR[My Ring]
         SP[Seller Profile]
-        CS[Create/Edit Listing]
+        CS[Create / Edit Listing]
     end
     subgraph BE["⚙️ Backend (port 5111)"]
-        API[Express /api]
-        LR[/listings]
-        OR[/offers]
-        MR2[/messages]
-        RR[/ratings]
-        UP[/upload]
+        API["Express /api"]
+        LR["/listings"]
+        OR["/offers"]
+        MSG["/messages"]
+        RR["/ratings"]
+        UP["/upload"]
     end
     subgraph DB["🍃 MongoDB"]
         LS[(Listings)]
@@ -169,10 +171,16 @@ graph TB
         IM[(Images)]
     end
 
-    FE -->|Axios + JWT| BE
+    FE -->|Axios + JWT| API
+    API --> LR
+    API --> OR
+    API --> MSG
+    API --> RR
+    API --> UP
     LR --> LS
     OR --> OF
-    OR -->|on accept| OF
+    OR -->|on accept: decline others| OF
+    MSG --> MS
     RR --> RT
     UP --> IM
 
@@ -193,7 +201,7 @@ erDiagram
         string email
         string passwordHash
         float sellerRating
-        number totalSales
+        int totalSales
     }
     LISTING {
         string id PK
@@ -202,8 +210,8 @@ erDiagram
         string description
         string category
         string condition
-        number askingPrice
-        string[] imageUrls
+        int askingPrice
+        array imageUrls
         string pickupLocation
         string status "available|negotiating|locked|sold|expired"
     }
@@ -211,25 +219,35 @@ erDiagram
         string id PK
         string listingId FK
         string buyerId FK
-        number amount
+        int amount
         string message
         string status "pending|countered|accepted|declined"
-        number counterAmount
+        int counterAmount
     }
     RATING {
         string id PK
         string reviewerId FK
         string revieweeId FK
         string listingId FK
-        number stars
+        int stars
         string comment
     }
+    MESSAGE {
+        string id PK
+        string listingId FK
+        string senderId FK
+        string receiverId FK
+        string text
+    }
 
-    USER ||--o{ LISTING : "sells"
-    LISTING ||--o{ OFFER : "receives"
-    USER ||--o{ OFFER : "makes"
-    USER ||--o{ RATING : "gives"
-    USER ||--o{ RATING : "receives"
+    USER ||--o{ LISTING : sells
+    LISTING ||--o{ OFFER : receives
+    USER ||--o{ OFFER : makes
+    USER ||--o{ RATING : gives
+    USER ||--o{ RATING : receives
+    LISTING ||--o{ RATING : "is rated after"
+    LISTING ||--o{ MESSAGE : "has chat"
+    USER ||--o{ MESSAGE : sends
 ```
 
 ---
@@ -245,7 +263,7 @@ erDiagram
 │  ████████    │  ████████    │  ████████    │  ████████     │
 ├──────────────┴──────────────┴──────────────┴───────────────┤
 │  Typography: Unbounded (Display) + Inter + Space Mono       │
-│  Aesthetic: Extreme dark · price tags · acid yellow brand   │
+│  Aesthetic: Extreme dark · price tags · acid green brand    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -253,18 +271,25 @@ erDiagram
 
 ## 🚀 Quick Start
 
+Run the backend and frontend in **two separate terminals**.
+
 ```bash
-# Backend (in-memory DB, pre-seeded)
-cd resellring/backend && cp .env.example .env && npm install && npm run dev
+# Terminal 1 - Backend (in-memory DB, pre-seeded)
+cd resellring/backend
+cp .env.example .env
+npm install
+npm run dev
 
-# Frontend
-cd resellring/frontend && npm install && npm run dev
-
-# Visit
-open http://localhost:5311
+# Terminal 2 - Frontend
+cd resellring/frontend
+npm install
+npm run dev
 ```
 
+Then open **http://localhost:5311** in your browser.
+
 ### 🎭 Demo Accounts
+
 | Role | Email | Password | What's Inside |
 |------|-------|----------|---------------|
 | 🏪 Seller | `kabir@demo.com` | `Demo@1234` | Active listings, incoming offers |
@@ -276,14 +301,14 @@ open http://localhost:5311
 
 ```
 resellring/
-├── 🖥️ frontend/
+├── frontend/
 │   └── src/
-│       ├── pages/     # Landing, Market, ListingDetail, MyRing, SellerProfile
-│       └── components/  # Navbar, states, SceneBackground
-└── ⚙️ backend/
-    ├── routes/        # listings, offers, ratings, messages, upload
-    ├── models/        # User, Listing, Offer, Rating, Message
-    └── seed/          # Demo listings with offer chains
+│       ├── pages/        # Landing, Market, ListingDetail, MyRing, SellerProfile
+│       └── components/   # Navbar, states, SceneBackground
+└── backend/
+    ├── routes/           # listings, offers, ratings, messages, upload
+    ├── models/           # User, Listing, Offer, Rating, Message
+    └── seed/             # Demo listings with offer chains
 ```
 
 ---
